@@ -1,24 +1,24 @@
 const express = require('express');
 const router = express.Router();
-// const Register = require('../models/register');
+ const Register = require('../models/users');
 
 
 router.post('/',async(req, res)=>{
 
     try {
-        const registerData = req.body;
+        const loginData = req.body;
 
-        const {error} = validateGenre(registerData);
+        const {error} = validateGenre(loginData);
         if(error) {return res.status(400).send(error.details[0].message);}
-       const register = new Register(registerData);
-       await register.save();
+       const login = new Register(loginData);
+       await login.save();
     
-        // const register = {
+        // const login = {
         //     id: genres.length + 1,
         //     type: req.body.type
         // };
-        // genres.push(register);
-        res.status(200).send(register);
+        // genres.push(login);
+        res.status(200).send(login);
     } catch (error) {
         res.status(400).send('e'+error)
     }
