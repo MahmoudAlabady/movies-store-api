@@ -1,37 +1,21 @@
-const joi = require('joi');
+// const joi = require('joi');
 const express =require('express');
 const app = express();
+require('./startup/routes')(app);
+
+require("dotenv").config();
+
+
 require('./db/mongoose');
 
-app.use(express.json());
 
-const port = process.env.PORT || 3000;
-const generRouter = require('./routes/genres');
-const customerRouter = require('./routes/customers');
-const moviesRouter = require('./routes/movies');
-const rentalsRouter = require('./routes/rentals');
-const usersRouter = require('./routes/users');
-const loginRouter = require('./routes/login');
-
-app.use('/api/genres',generRouter);
-app.use('/api/customers',customerRouter);
-app.use('/api/movies',moviesRouter);
-app.use('/api/rentals',rentalsRouter);
-app.use('/api/users',usersRouter);
-app.use('/api/logins',loginRouter);
-
-
-// genres=[
-//     {id: 1 , type: 'romance'},
-//     {id: 2 , type: 'action'},
-//     {id: 3 , type: 'drama'}
-    
-// ]
+const port = process.env.PORT;
 
 
 
 
-app.listen(port,()=>console.log(`server is running on ${port}`));
 
+const server = app.listen(port,()=>console.log(`server is running on ${port}`));
 
+module.exports = server;
 

@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth')
 const express = require('express');
 const router = express.Router();
 const {Customer,validateCustomer} = require('../models/customers');
@@ -7,7 +8,7 @@ const {Customer,validateCustomer} = require('../models/customers');
 
 
 //get all customers
-router.get('/',async(req, res)=>{
+router.get('/',auth,async(req, res)=>{
     try {
        const customers=await Customer.find({}).sort('name');
         res.status(200).send(customers);
@@ -18,7 +19,7 @@ router.get('/',async(req, res)=>{
     
 } );
 //get one customer
-router.get('/:id',async(req, res)=>{
+router.get('/:id',auth,async(req, res)=>{
     try {
         const _id = req.params.id;
         const customer = await Customer.findById(_id);
@@ -34,7 +35,7 @@ router.get('/:id',async(req, res)=>{
 } )
 
 //create customer
-router.post('/',async(req, res)=>{
+router.post('/',auth,async(req, res)=>{
 
     try {
         const customerData = req.body;
@@ -52,7 +53,7 @@ router.post('/',async(req, res)=>{
 } );
 
 //update customer
-router.patch('/:id',async(req, res)=>{
+router.patch('/:id',auth,async(req, res)=>{
     try {
         const _id = req.params.id;
         const customerData = req.body;
@@ -77,7 +78,7 @@ router.patch('/:id',async(req, res)=>{
    
     } )
 //delete customer
-router.delete('/:id',async(req, res)=>{
+router.delete('/:id',auth,async(req, res)=>{
     try {
         const _id = req.params.id;
         const customer = await Customer.findByIdAndDelete(_id);      

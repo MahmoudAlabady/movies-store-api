@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const express = require('express');
 const router = express.Router();
 // const mongoose = require('mongoose');
@@ -6,7 +7,7 @@ const {Customer} = require('../models/customers');
 const {Movie} = require('../models/movies');
 
 
-router.get('/', async (req, res)=>{
+router.get('/',auth, async (req, res)=>{
     try {
         const rentals = await Rental.find({}).sort('name');
         res.status(200).send(rentals);
@@ -15,7 +16,7 @@ router.get('/', async (req, res)=>{
     }
 })
 
-router.post('/', async(req,res)=>{
+router.post('/',auth, async(req,res)=>{
     try {
         const rentalData = req.body;
         const{error} = validateRental(rentalData);

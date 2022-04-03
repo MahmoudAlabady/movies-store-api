@@ -1,3 +1,5 @@
+const auth = require('../middleware/auth')
+
 const express = require('express');
 const router = express.Router();
 const {Movie,validateMovie} = require('../models/movies');
@@ -35,7 +37,7 @@ router.get('/:id',async(req, res)=>{
 } )
 
 //create movie
-router.post('/',async(req, res)=>{
+router.post('/',auth,async(req, res)=>{
 
     try {
         // const genre = await Genre.findById
@@ -77,7 +79,7 @@ router.post('/',async(req, res)=>{
 } );
 
 //update movie
-router.patch('/:id',async(req, res)=>{
+router.patch('/:id',auth,async(req, res)=>{
     try {
         const _id = req.params.id;
         const movieData = req.body;
@@ -105,7 +107,7 @@ router.patch('/:id',async(req, res)=>{
    
     } )
 //delete movie
-router.delete('/:id',async(req, res)=>{
+router.delete('/:id',auth,async(req, res)=>{
     try {
         const _id = req.params.id;
         const movie = await Movie.findByIdAndDelete(_id);      

@@ -1,42 +1,43 @@
+const validateObjectId =require('../middleware/validateObjectId')
+const admin = require('../middleware/admin');
+const auth = require('../middleware/auth')
+const tryCatchMiddleware = require('../middleware/tryCatchMiddleware');
 const express = require('express');
 const router = express.Router();
 const {Genre,validateGenre} = require('../models/genres');
+const Logger = require('../services/logger.service');
+const { default: mongoose } = require('mongoose');
 
+const logger = new Logger('genres');
 
 
 
 
 //get all geners
-router.get('/',async(req, res)=>{
-    try {
-       const genres=await Genre.find({}).sort('name');
-        res.status(200).send(genres);
-    } catch (error) {
-        res.status(500).send(error)
-
-    }
+router.get('/',tryCatchMiddleware(async(req, res,next)=>{
     
-} );
+       const genres=await Genre.find({}).sort('name');
+       logger.info("return genres List" , genres);
+        res.status(200).send(genres);
+   
+    
+} ));
 //get one gener
-router.get('/:id',async(req, res)=>{
-    try {
+router.get('/:id',validateObjectId,tryCatchMiddleware(async(req, res)=>{
         const _id = req.params.id;
         const gener = await Genre.findById(_id);
         if(!gener){
             return res.status(404).send(' genere not found');
 
         }
-         res.status(200).send(gener);
-    } catch (error) {
-        res.status(500).send('ERR'+error)
-    }
+        res.status(200).send(gener);   
 
-} )
+} ))
 
 //create gener
-router.post('/',async(req, res)=>{
+router.post('/',auth,tryCatchMiddleware(async(req, res)=>{
 
-    try {
+    
         const generData = req.body;
 
         const {error} = validateGenre(generData);
@@ -50,14 +51,12 @@ router.post('/',async(req, res)=>{
         // };
         // genres.push(gener);
         res.status(200).send(gener);
-    } catch (error) {
-        res.status(400).send('e'+error)
-    }
+    
    
-} );
+}) );
 
 //update gener
-router.patch('/:id',async(req, res)=>{
+router.patch('/:id',auth,async(req, res)=>{
     try {
         const _id = req.params.id;
         const generData = req.body;
@@ -75,7 +74,7 @@ router.patch('/:id',async(req, res)=>{
    
     } )
 //delete gener
-router.delete('/:id',async(req, res)=>{
+router.delete('/:id',[auth,admin],async(req, res)=>{
     try {
         const _id = req.params.id;
         const gener = await Genre.findByIdAndDelete(_id);      
