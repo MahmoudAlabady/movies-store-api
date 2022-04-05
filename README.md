@@ -1,2 +1,2 @@
-# vidly
+# movies-store-api(vidly)
  
