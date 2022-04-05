@@ -1,12 +1,15 @@
 const request = require('supertest');
-const {Genre} = require('../../models/genres')
+const {Genre} = require('../../../models/genres');
+const {User} = require('../../../models/users')
+
 let server;
 
 describe('/api/genres',()=>{
-    beforeEach(() => {server = require('../../index');})
+    beforeEach(() => {server = require('../../../index');})
     afterEach(async()=>{
-        server.close();
         await Genre.remove({});
+
+        await  server.close();
     });
      
     describe('GET /',()=>{
@@ -53,4 +56,33 @@ describe('/api/genres',()=>{
     
             });
     });
+    describe('POST /', ()=>{
+        it('should return 401 if client is not logged in', async ()=>{
+            const res = await request(server).post('/api/genres').send({name: 'horrer1'});
+            expect(res.status).toBe(401);
+        });
+        it('should return 400 if genre is innvalid', async ()=>{
+            const token = new User().generateToken();
+
+            const res = await request(server).post('/api/genres').set('x-auth-token',token).send({name: 'h'});
+            expect(res.status).toBe(400);
+        });
+        it('should save the  if genre is innvalid', async ()=>{
+            const token = new User().generateToken();
+        
+            const res = await request(server).post('/api/genres').set('x-auth-token',token).send({name: 'action1'});
+          const genre = await Genre.findOne({name:'action1'});
+
+            expect(genre).not.toBeNull();
+        });
+        it('should return the  if it is nvalid', async ()=>{
+            const token = new User().generateToken();
+        
+            const res = await request(server).post('/api/genres').set('x-auth-token',token).send({name: 'action1'});
+
+            expect(res.body).toHaveProperty('_id');
+            expect(res.body).toHaveProperty('name','action1');
+
+        });
+    } );
 });
