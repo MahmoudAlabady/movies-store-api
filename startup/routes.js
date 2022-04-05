@@ -10,7 +10,7 @@ const error = require('../middleware/error');
 function routes(app) {
     app.use(express.json());
 
-    app.use('/api/genres',generRouter);
+app.use('/api/genres',generRouter);
 app.use('/api/customers',customerRouter);
 app.use('/api/movies',moviesRouter);
 app.use('/api/rentals',rentalsRouter);
