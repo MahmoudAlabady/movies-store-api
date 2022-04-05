@@ -21,7 +21,7 @@ class LoggerService {
             }),
             transports: [
               new winston.transports.Console(),
-              new winston.transports.File({ filename: `${process.env.LOG_FILE_PATH} / ${route}.log` }),
+              new winston.transports.File({ filename:`${process.env.LOG_FILE_PATH} / ${route}.log` }),
             ],
           });
           this.logger = logger;
