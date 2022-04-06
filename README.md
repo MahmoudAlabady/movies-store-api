@@ -1,4 +1,7 @@
 # movies-store-api(vidly)
+sample video testing
+---
+https://drive.google.com/file/d/1SbHWgqrOhAaYksZ49_b6NvsSLwzn-GTb/view?usp=sharing
 
 Online Demo:
 ---------------------------
